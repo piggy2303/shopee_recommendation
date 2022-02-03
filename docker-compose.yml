@@ -1,0 +1,9 @@
+version: "3.1"
+
+services:
+  shopee_recomd:
+    image: shopee_recommended
+    tty: true
+    volumes:
+      - .:/app
+    command: bash run.sh
