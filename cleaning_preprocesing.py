@@ -5,6 +5,10 @@ import os
 # import matplotlib.pyplot as plt
 import re
 from sklearn.preprocessing import MinMaxScaler
+from pandas.core.common import SettingWithCopyWarning
+import warnings
+warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
+
 
 scaler = MinMaxScaler()
 
@@ -30,7 +34,7 @@ def item_json_to_object(json_file_path: str) -> dict:
     shopid = json_file_path.split("_")[0]
     itemid = json_file_path.split("_")[1].split(".")[0]
 
-    item_details = open("item_data/"+json_file_path, "r")
+    item_details = open("./data/item_data/"+json_file_path, "r")
     item_details = json.load(item_details)
     item_name = preprprocess_string(item_details["name"])
     item_price = item_details["price"]
@@ -74,7 +78,7 @@ def item_json_to_object(json_file_path: str) -> dict:
 def shop_json_to_object(json_file_path: str) -> dict:
     shopid = json_file_path.split('.')[0]
 
-    shop_details = open("shop_data/"+json_file_path, "r")
+    shop_details = open("./data/shop_data/"+json_file_path, "r")
     shop_details = json.load(shop_details)
 
     shop_slug = shop_details["account"]["username"]
@@ -103,7 +107,7 @@ def shop_json_to_object(json_file_path: str) -> dict:
 
 def preprprocess_item():
     item_data = []
-    for i in os.listdir("item_data/"):
+    for i in os.listdir("./data/item_data/"):
         item_data.append(item_json_to_object(i))
 
     item_data = pd.DataFrame(item_data)
@@ -137,7 +141,7 @@ def calculate_score(shop_data: pd.DataFrame) -> np.array:
 
 def preprprocess_shop():
     shop_data = []
-    for i in os.listdir("shop_data/"):
+    for i in os.listdir("./data/shop_data/"):
         shop_data.append(shop_json_to_object(i))
     shop_data = pd.DataFrame(shop_data)
 

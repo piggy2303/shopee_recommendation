@@ -1,5 +1,13 @@
 <h1> Recommendation System</h1>
 
+# Prepare dataset
+
+If you dont want to waste time crawling data
+
+Please dowload it from [this link](https://drive.google.com/file/d/1HJJ06peMHtdzIGaEvc8bU61XE3ZjpBUL/view?usp=sharing)
+
+Unzip it and place "data" folder in the project
+
 # 1. Quick start
 
 You need Docker and Docker-compose to run the following command

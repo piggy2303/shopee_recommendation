@@ -23,13 +23,13 @@ def file_exists(file_name):
 
 
 def craw_shop_list():
-    if not file_exists('./list_shop.json'):
+    if not file_exists('./data/list_shop.json'):
         params = {
             "need_zhuyin": 0,
             "category_id": 11036132
         }
         r = requests_get('official_shop/get_shops_by_category', params)
-        save_to_file(r, 'list_shop.json')
+        save_to_file(r, './data/list_shop.json')
     print("crawl_shop_list done")
 
 
@@ -46,14 +46,14 @@ def craw_item_from_shop(shop_id: int) -> None:
         "version": 2
     }
 
-    file_name = './raw_data/' + str(shop_id) + '.json'
+    file_name = './data/raw_data/' + str(shop_id) + '.json'
     if not file_exists(file_name):
         r = requests_get('search/search_items', params)
         save_to_file(r, file_name)
 
 
 def craw_item_list():
-    list_shop = json.load(open('list_shop.json'))
+    list_shop = json.load(open('./data/list_shop.json'))
     list_shop = list_shop["data"]["brands"]
 
     # print(list_shop)
@@ -66,11 +66,11 @@ def craw_item_list():
 
 
 def craw_item_details():
-    list_file_json = os.listdir("./raw_data")
+    list_file_json = os.listdir("./data/raw_data")
 
     for file_json in list_file_json:
 
-        file = open("./raw_data/" + file_json, 'r')
+        file = open("./data/raw_data/" + file_json, 'r')
         data = json.load(file)["items"]
 
         for i in data:
@@ -80,7 +80,7 @@ def craw_item_details():
 
             params = {"itemid": itemid, "shopid": shopid}
 
-            file_name = './item_data/' + \
+            file_name = './data/item_data/' + \
                 str(shopid) + "_" + str(itemid) + '.json'
             if not file_exists(file_name):
                 r = requests_get('item/get', params)
@@ -90,13 +90,13 @@ def craw_item_details():
 
 
 def craw_shop_details():
-    list_file_json = os.listdir("./raw_data")
+    list_file_json = os.listdir("./data/raw_data")
 
     for shopid in list_file_json:
         shopid = shopid.split('.')[0]
         params = {"shopid": shopid}
 
-        file_name = './shop_data/' + str(shopid) + '.json'
+        file_name = './data/shop_data/' + str(shopid) + '.json'
 
         if not file_exists(file_name):
             r = requests_get('product/get_shop_info', params)
@@ -105,25 +105,27 @@ def craw_shop_details():
     print("craw_shop_details done")
 
 
+def create_nest_folder(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+
 if __name__ == "__main__":
     # get list of shop
-    # save to file list_shop.json
+    # save to file ./data/list_shop.json
     craw_shop_list()
 
-    if not os.path.exists("raw_data"):
-        os.makedirs("raw_data")
+    create_nest_folder("./data/raw_data")
     # get list of items from shop
     # save list of result to file ./raw_data/[shop_id].json
     craw_item_list()
 
-    if not os.path.exists("item_data"):
-        os.makedirs("item_data")
+    create_nest_folder("./data/item_data")
     # get detail information of items
     # save result to file ./item_data/[shop_id]_[item_id].json
     craw_item_details()
 
-    if not os.path.exists("shop_data"):
-        os.makedirs("shop_data")
+    create_nest_folder("./data/shop_data")
     # get detail information of shop
     # save result to file ./shop_data/[shop_id].json
     craw_shop_details()

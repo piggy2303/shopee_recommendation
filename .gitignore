@@ -1,2 +1,4 @@
 .ipynb_checkpoints
 *.json
+*.zip
+.DS_Store
