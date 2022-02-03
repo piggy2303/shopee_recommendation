@@ -15,5 +15,5 @@ echo "unzip complete"
 
 
 python3 crawl_data.py
-python3 cleaning_preprocesing.py
+python3 cleaning_preprocessing.py
 python3 recommendation.py
